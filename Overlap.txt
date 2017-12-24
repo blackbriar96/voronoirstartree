@@ -1,0 +1,1 @@
+Overlap = Max(0,Min(MaxX1,MaxX2)) - Max(MinX1,MinX2) * Max(0,Min(MaxY1,MaxY2))-Max(MinY1,MinY2)
