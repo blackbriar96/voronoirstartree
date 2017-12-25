@@ -16,8 +16,12 @@ if __name__ == '__main__':
     
     voronoi_list = input_reader.read_input(file_input)
     tree = RStartTree(max_content_size = 4, content = voronoi_list)
-
     query_point = Point([float(data) for data in raw_input('Query Point (x,y): ').split(',')])
 
     # print tree.seq_search(query_point, include_on_edge = True)
-    print tree.search(query_point, include_on_edge = True)
+    region = tree.search(query_point, include_on_edge = True)
+
+    if region is not '':
+        print 'Region Found:', region
+    else:
+        print 'Not Found'
