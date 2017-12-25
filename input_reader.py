@@ -36,6 +36,7 @@ def read_input(address='voronoi.input'):
         data = line.split(',')
 
         if current_region != data[0]:
+            print 'read region:', current_region
             if len(points) > 0:
                 voronoi_list.append(Voronoi(current_region, points))
             

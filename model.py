@@ -62,7 +62,7 @@ class RStartTree(object):
                     possible_region.append(node.search(query_point, include_on_edge))
                 else:
                     possible_region.append(node.name)
-        return '' if len(possible_region) < 1 else ''.join(possible_region).strip()
+        return '' if len(possible_region) < 1 else ' '.join(possible_region).strip()
 
     def insert(self, new_inserted):
         # find node
@@ -116,23 +116,29 @@ class RStartTree(object):
         # ready the new container
         first_node = None
         second_node = None
+        best_area = None
+        best_overlap = None
 
         # put indexes in new list
         content_indexes = list(range(len(self.childs)))  
         for max_member_count in range(self.max_content_size):
-            for first_indexes, second_indexes in comb_and_comp(content_indexes, max_member_count + 1):                
+            for first_indexes, second_indexes in comb_and_comp(content_indexes, max_member_count + 1):  # dont need 0 max member, it is not split
                 new_first = RStartTree(max_content_size = self.max_content_size, content = [self.childs[i] for i in first_indexes])
                 new_second = RStartTree(max_content_size = self.max_content_size, content = [self.childs[i] for i in second_indexes])
 
                 if (first_node is None and second_node is None):
                     first_node = new_first
                     second_node = new_second
-                else:
-                    current_best = first_node.bound.area + second_node.bound.area
-                    new_best = new_first.bound.area + new_second.bound.area
-                    if new_best <= current_best:  # ' <= ' take last configuration, cause it divide the node with more member
+                    best_area = first_node.bound.area + second_node.bound.area
+                    best_overlap = RStartTree.count_overlap_area(first_node, second_node)
+                else:                    
+                    new_area = new_first.bound.area + new_second.bound.area
+                    new_overlap = RStartTree.count_overlap_area(new_first, new_second)
+                    if new_overlap <= best_overlap or (new_area <= best_area):  # ' <= ' take last configuration, cause it divide the node with more member
                         first_node = new_first
                         second_node = new_second
+                        best_area = new_area
+                        best_overlap = new_overlap
 
         first_node.parent = self
         second_node.parent = self
