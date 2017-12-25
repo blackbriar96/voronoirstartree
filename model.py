@@ -134,7 +134,7 @@ class RStartTree(object):
                 else:                    
                     new_area = new_first.bound.area + new_second.bound.area
                     new_overlap = RStartTree.count_overlap_area(new_first, new_second)
-                    if new_overlap <= best_overlap or (new_area <= best_area):  # ' <= ' take last configuration, cause it divide the node with more member
+                    if new_overlap < best_overlap or (new_overlap == best_overlap and new_area <= best_area):  # ' <= ' take last configuration, cause it divide the node with more member
                         first_node = new_first
                         second_node = new_second
                         best_area = new_area
